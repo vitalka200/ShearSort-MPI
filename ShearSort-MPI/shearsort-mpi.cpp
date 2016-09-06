@@ -143,7 +143,7 @@ CommDirection GetCommDirection(int* coord, int iteration, MatrixPassDirection di
 {
 	// if position even and iteration even we are sending, otherwise receiving
 	// if position odd and iteration odd we are sending, otherwise receiving
-	return (iteration % 2 == coord[direction^1] % 2) ? SENDING : RECEIVING;
+	return (iteration % 2 == coord[direction] % 2) ? SENDING : RECEIVING;
 }
 
 SortDirection GetSortDirection(int* coord, MatrixPassDirection direction)
@@ -178,10 +178,12 @@ void PrintResult(int* matrix)
 void ReversePrint(int* matrix)
 {
 	printf("========== Flat View ===========\n");
+    bool evenLinesSwapper = MATRIX_CELLS_COUNT % 2 == 0 ? true : false;
 	for (int i = MATRIX_CELLS_COUNT - MATRIX_DIM; i >= 0; i -= MATRIX_DIM*2)
 	{
-		PrintLine(matrix + i, MATRIX_DIM, true);
-		PrintLine(matrix + i-MATRIX_DIM, MATRIX_DIM, false);
+        PrintLine(matrix + i, MATRIX_DIM, evenLinesSwapper);
+        // take care of odd matrix dimentions
+        if (i - MATRIX_DIM > 0) { PrintLine(matrix + i - MATRIX_DIM, MATRIX_DIM, !evenLinesSwapper); }
 	}
 }
 

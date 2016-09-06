@@ -1,6 +1,6 @@
 #pragma once
 
-const int MATRIX_DIM = 8;
+const int MATRIX_DIM = 7;
 const int MATRIX_CELLS_COUNT = MATRIX_DIM*MATRIX_DIM;
 const int CELLS_PER_PROC = 1; // Each node take care of only one cell
 const int NEIGHBOR_DISTANCE = 1;
