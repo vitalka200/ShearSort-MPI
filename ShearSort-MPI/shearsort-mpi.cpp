@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
 	int* matrix = new int[MATRIX_CELLS_COUNT] { 0 };
 	int receivedNum;
 	int dims[CART_DIM] = { MATRIX_DIM, MATRIX_DIM };
-	int periods[CART_DIM] = { 0, 0 }; // we don't want ciclic toplogy
+	int periods[CART_DIM] = { 0, 0 }; // we don't want ciclic topolgy
 	int reorder = 0; // we don't want that MPI reorder nodes
 	MPI_Comm calcComm;
 	MPI_Status status;
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
 	// Create MPI Cartesian topology with 2 dimmentions
 	MPI_Cart_create(MPI_COMM_WORLD, CART_DIM, dims, periods, reorder, &calcComm);
 
-	// Sort matrix. Total complexity MATRIX_PASES*NODES_ITERATION+1 = O(2*log2(n)+1)
+	// Sort matrix. Complexity O(2*log2(n)+1)
 	receivedNum = ShearSort(receivedNum, calcComm);
 
 	// Receive sorted data
@@ -191,13 +191,11 @@ void PrintLine(int* line, int count, bool isForward)
 	
 	if (isForward)
 	{
-		for (int i = 0; i < count; i++)
-			printf("%3d ", line[i]);
+		for (int i = 0; i < count; i++) { printf("%3d ", line[i]); }
 	}
 	else
 	{
-		for (int i = count - 1; i >= 0; i--)
-			printf("%3d ", line[i]);
+		for (int i = count - 1; i >= 0; i--) { printf("%3d ", line[i]); }
 	}
 }
 

@@ -22,6 +22,7 @@ enum SortDirection {
 	ASCENDING = 0,
 	DESCENDING = 1
 };
+
 void          GenerateMatrix(int* matrix);
 int           ShearSort(int receivedNum, MPI_Comm comm);
 int           OddEvenSort(int* coord, int storedNum, MatrixPassDirection direction, MPI_Comm comm);
