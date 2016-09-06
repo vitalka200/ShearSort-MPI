@@ -29,5 +29,8 @@ int           ExchangeBetweenNeighbors(int storedNum, CommDirection commDirectio
 bool          isGreater(int num1, int num2, SortDirection sortDirection);
 CommDirection GetCommDirection(int* coord, int iteration, MatrixPassDirection direction);
 SortDirection GetSortDirection(int* coord, MatrixPassDirection direction);
-void          PrintInitialMatrix(int *matrix);
-void          PrintDescendingOrder(int* matrix);
+void          PrintInitial(int *matrix);
+void          PrintResult(int* matrix);
+void          PrintLine(int* line, int count, bool isForward);
+void          RegularPrint(int* matrix, bool isFlatView);
+void          ReversePrint(int* matrix);

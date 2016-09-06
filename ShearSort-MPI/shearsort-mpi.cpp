@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
 	{
 		// Prepare initial matrix
 		GenerateMatrix(matrix);
-		PrintInitialMatrix(matrix);
+		PrintInitial(matrix);
 		startTime = MPI_Wtime(); // start time counter on master before sending numbers
 	}
 
@@ -51,8 +51,10 @@ int main(int argc, char* argv[]) {
 
 	if (currentId == MASTER_RANK)
 	{
-		PrintDescendingOrder(matrix);
+		PrintResult(matrix);
 		stopTime = MPI_Wtime();
+		printf("============ Result ============\n");
+		printf("================================\n");
 		printf("Number of elements n^2: %d\nExecution Time: %f\n", MATRIX_CELLS_COUNT, stopTime - startTime);
 	}
 	MPI_Finalize();
@@ -67,7 +69,6 @@ void GenerateMatrix(int* matrix)
 
 	for (int i = 0; i < MATRIX_CELLS_COUNT; i++)
 		matrix[i] = rand() % MATRIX_CELLS_COUNT; 
-		//matrix[i] = MATRIX_CELLS_COUNT - i;
 }
 
 int ShearSort(int receivedNum, MPI_Comm comm)
@@ -149,32 +150,64 @@ SortDirection GetSortDirection(int* coord, MatrixPassDirection direction)
 {
 	// Even Row  ASCENGING
 	// Odd Row   DESCENDING
-	// Even Coll ASCENGING;
-	// Odd Coll  DESCENDING;
+	// Coll always ASCENGING;
 	if (direction == COLLS) return ASCENDING;
 	return (SortDirection)(coord[0] % 2);
 }
 
-void PrintInitialMatrix(int *matrix)
+void PrintInitial(int *matrix)
 {
-	printf("===== Initial Matrix =====\n");
-	for (int i = 0; i < MATRIX_CELLS_COUNT; i++)
-	{
-		if (i%MATRIX_DIM == 0) { printf("\n"); }
-		printf("%3d ", matrix[i]);
-	}
-	printf("\n==========================\n"); 
+	printf("======== Initial Numbers =======\n");
+	RegularPrint(matrix, true);
+	printf("\n================================\n");
+	RegularPrint(matrix, false);
+	printf("\n================================\n");
 	fflush(stdout);
 }
 
-void PrintDescendingOrder(int* matrix)
+void PrintResult(int* matrix)
 {
-	printf("===== Sorted Matrix =====\n");
-	PrintInitialMatrix(matrix);
-	for (int i = MATRIX_CELLS_COUNT-1; i >= 0; i--)
+	printf("======== Sorted Numbers ========\n");
+	RegularPrint(matrix, false);
+	printf("\n================================\n");
+	ReversePrint(matrix);
+	printf("\n================================\n");
+
+}
+
+void ReversePrint(int* matrix)
+{
+	printf("========== Flat View ===========\n");
+	for (int i = MATRIX_CELLS_COUNT - MATRIX_DIM; i >= 0; i -= MATRIX_DIM*2)
 	{
-		
+		PrintLine(matrix + i, MATRIX_DIM, true);
+		PrintLine(matrix + i-MATRIX_DIM, MATRIX_DIM, false);
 	}
-	printf("\n==========================\n");
-	fflush(stdout);
+}
+
+
+void PrintLine(int* line, int count, bool isForward)
+{
+	
+	if (isForward)
+	{
+		for (int i = 0; i < count; i++)
+			printf("%3d ", line[i]);
+	}
+	else
+	{
+		for (int i = count - 1; i >= 0; i--)
+			printf("%3d ", line[i]);
+	}
+}
+
+void RegularPrint(int* matrix, bool isFlatView)
+{
+	if (isFlatView) { printf("========== Flat View ===========\n"); }
+	else { printf("========= Matrix View ==========\n"); }
+	for (int i = 0; i < MATRIX_CELLS_COUNT; i += MATRIX_DIM)
+	{
+		PrintLine(matrix + i, MATRIX_DIM, true);
+		if (!isFlatView) { printf("\n"); }
+	}
 }
